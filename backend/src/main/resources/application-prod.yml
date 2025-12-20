@@ -1,0 +1,25 @@
+spring:
+  datasource:
+    # Production openGauss Database Configuration (using environment variables)
+    url: jdbc:postgresql://${DB_HOST:124.70.48.79}:${DB_PORT:26000}/${DB_NAME:car_sales_db}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    hikari:
+      connection-test-query: SELECT 1
+      minimum-idle: 5
+      maximum-pool-size: 20
+
+# MyBatis-Plus Configuration for Production
+mybatis-plus:
+  configuration:
+    # Disable SQL logging in production
+    log-impl: org.apache.ibatis.logging.nologging.NoLoggingImpl
+
+# Logging Configuration for Production
+logging:
+  level:
+    root: WARN
+    com.carsales: INFO
+    com.baomidou.mybatisplus: WARN
+  file:
+    name: /var/log/car-sales-system/application.log
