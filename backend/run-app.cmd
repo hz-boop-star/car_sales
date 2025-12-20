@@ -1,15 +1,20 @@
 @echo off
+setlocal enabledelayedexpansion
 echo Starting Car Sales System Backend...
 echo.
 
-REM Set environment variables
-if not defined DB_USERNAME set DB_USERNAME=admin_navicat
-if not defined DB_PASSWORD set DB_PASSWORD=BigData@123
+REM Load environment variables from .env file if exists
+if exist .env (
+    echo Loading environment from .env file...
+    for /f "usebackq eol=# tokens=1,* delims==" %%a in (".env") do (
+        set "%%a=%%b"
+    )
+)
 
-echo Database: 124.70.48.79:26000/car_sales_db
+echo Database: %DB_HOST%:%DB_PORT%/%DB_NAME%
 echo Username: %DB_USERNAME%
 echo.
-echo Application will start on http://localhost:8080/api
+echo Application will start on http://localhost:%SERVER_PORT%
 echo Logs are being written to: logs\car-sales-system.log
 echo Press Ctrl+C to stop the application
 echo.

@@ -30,3 +30,9 @@ Thumbs.db
 
 # Application
 application-local.yml
+
+# Jqwik test database
+.jqwik-database
+
+# Environment file with secrets
+.env

@@ -1,16 +1,21 @@
 @echo off
+setlocal enabledelayedexpansion
 echo Starting Car Sales System Backend (Development Mode)...
 echo.
 
-REM Set environment variables (if not already set)
-if not defined DB_USERNAME set DB_USERNAME=admin_navicat
-if not defined DB_PASSWORD set DB_PASSWORD=BigData@123
+REM Load environment variables from .env file if exists
+if exist .env (
+    echo Loading environment from .env file...
+    for /f "usebackq eol=# tokens=1,* delims==" %%a in (".env") do (
+        set "%%a=%%b"
+    )
+)
 
 echo Database Configuration:
-echo   Host: 124.70.48.79:26000
-echo   Database: car_sales_db
+echo   Host: %DB_HOST%:%DB_PORT%
+echo   Database: %DB_NAME%
 echo   Username: %DB_USERNAME%
 echo.
 
 REM Start the application with dev profile
-mvnw.cmd spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=dev"
+call mvnw.cmd spring-boot:run -Dspring-boot.run.profiles=dev
