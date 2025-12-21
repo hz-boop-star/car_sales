@@ -27,49 +27,49 @@ public class CarInfo {
     /**
      * 车架号VIN（17位唯一标识）
      */
-    @ExcelProperty("车架号")
+    @ExcelProperty(value = "车架号", index = 0)
     private String vin;
 
     /**
      * 品牌
      */
-    @ExcelProperty("品牌")
+    @ExcelProperty(value = "品牌", index = 1)
     private String brand;
 
     /**
      * 型号
      */
-    @ExcelProperty("型号")
+    @ExcelProperty(value = "型号", index = 2)
     private String model;
 
     /**
      * 颜色
      */
-    @ExcelProperty("颜色")
+    @ExcelProperty(value = "颜色", index = 3)
     private String color;
 
     /**
      * 年份
      */
-    @ExcelProperty("年份")
+    @ExcelProperty(value = "年份", index = 4)
     private Integer year;
 
     /**
      * 价格
      */
-    @ExcelProperty("价格")
+    @ExcelProperty(value = "价格", index = 5)
     private BigDecimal price;
 
     /**
      * 状态：0-在库, 1-锁定, 2-已售
      */
-    @ExcelProperty("状态")
+    @ExcelProperty(value = "状态(0-在库/1-锁定/2-已售)", index = 6)
     private Integer status;
 
     /**
      * 进货日期
      */
-    @ExcelProperty("进货日期")
+    @ExcelProperty(value = "进货日期", index = 7)
     private LocalDate purchaseDate;
 
     /**

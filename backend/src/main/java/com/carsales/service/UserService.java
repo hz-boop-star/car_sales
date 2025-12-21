@@ -152,4 +152,17 @@ public class UserService {
                 .userInfo(userInfo)
                 .build();
     }
+
+    /**
+     * 查询所有销售员
+     * 
+     * @return 销售员列表
+     */
+    public java.util.List<SysUser> getSalespersons() {
+        LambdaQueryWrapper<SysUser> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(SysUser::getRole, "SALESPERSON");
+        queryWrapper.eq(SysUser::getStatus, 1); // 只查询启用的用户
+        queryWrapper.orderByAsc(SysUser::getRealName);
+        return userMapper.selectList(queryWrapper);
+    }
 }

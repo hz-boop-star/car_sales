@@ -65,4 +65,16 @@ public class AuthController {
         LoginResponse response = userService.getUserInfoByToken(actualToken);
         return Result.success(response);
     }
+
+    /**
+     * 获取销售员列表
+     * 
+     * @return 销售员列表
+     */
+    @GetMapping("/salespersons")
+    public Result<java.util.List<com.carsales.entity.SysUser>> getSalespersons() {
+        log.info("获取销售员列表");
+        java.util.List<com.carsales.entity.SysUser> salespersons = userService.getSalespersons();
+        return Result.success(salespersons);
+    }
 }

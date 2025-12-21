@@ -5,9 +5,9 @@ spring:
   # Database Configuration (openGauss via PostgreSQL driver)
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/car_sales_db
-    username: gaussdb
-    password: Gauss@123
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:car_sales_db}
+    username: ${DB_USERNAME:gaussdb}
+    password: ${DB_PASSWORD:Gauss@123}
     hikari:
       minimum-idle: 5
       maximum-pool-size: 20
@@ -46,7 +46,7 @@ mybatis-plus:
 
 # Server Configuration
 server:
-  port: 8080
+  port: ${SERVER_PORT:8080}
   compression:
     enabled: true
 
@@ -63,11 +63,14 @@ logging:
     name: logs/car-sales-system.log
     max-size: 10MB
     max-history: 30
+  charset:
+    console: UTF-8
+    file: UTF-8
 
 # JWT Configuration
 jwt:
-  secret: car-sales-system-secret-key-2024-change-in-production
-  expiration: 86400000  # 24 hours in milliseconds
+  secret: ${JWT_SECRET:car-sales-system-secret-key-2024-change-in-production}
+  expiration: ${JWT_EXPIRATION:86400000}  # 24 hours in milliseconds
   header: Authorization
   prefix: Bearer 
 

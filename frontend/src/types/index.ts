@@ -17,7 +17,7 @@ export interface PageResult<T> {
 
 // 用户类型
 export interface User {
-    id: number
+    id: string
     username: string
     realName: string
     role: 'ADMIN' | 'SALESPERSON'
@@ -39,7 +39,7 @@ export interface LoginResponse {
 
 // 车辆类型
 export interface Car {
-    id: number
+    id: string  // 使用字符串避免大整数精度丢失
     vin: string
     brand: string
     model: string
@@ -54,7 +54,7 @@ export interface Car {
 
 // 客户类型
 export interface Customer {
-    id: number
+    id: string
     name: string
     phone: string
     idCard: string
@@ -66,11 +66,11 @@ export interface Customer {
 
 // 订单类型
 export interface Order {
-    id: number
+    id: string
     orderNo: string
-    salesUserId: number
-    customerId: number
-    carId: number
+    salesUserId: string
+    customerId: string
+    carId: string
     originalPrice: number
     actualPrice: number
     discountAmount: number

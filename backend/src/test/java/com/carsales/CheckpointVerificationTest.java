@@ -3,7 +3,6 @@ package com.carsales;
 import com.carsales.dto.*;
 import com.carsales.entity.CarInfo;
 import com.carsales.entity.Customer;
-import com.carsales.entity.SalesOrder;
 import com.carsales.entity.SysUser;
 import com.carsales.exception.BusinessException;
 import com.carsales.mapper.CarMapper;

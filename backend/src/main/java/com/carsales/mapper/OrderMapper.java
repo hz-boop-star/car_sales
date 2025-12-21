@@ -1,6 +1,7 @@
 package com.carsales.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.carsales.dto.OrderDetailVO;
 import com.carsales.entity.SalesOrder;
 import org.apache.ibatis.annotations.Mapper;
@@ -8,6 +9,7 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Map;
 
 /**
@@ -51,4 +53,41 @@ public interface OrderMapper extends BaseMapper<SalesOrder> {
             "INNER JOIN car_info car ON o.car_id = car.id " +
             "WHERE o.id = #{orderId}")
     OrderDetailVO selectOrderDetailById(@Param("orderId") Long orderId);
+
+    /**
+     * 分页查询订单详情列表（包含关联的用户、客户、车辆信息）
+     * 支持多条件筛选
+     * 
+     * @param page        分页对象
+     * @param startDate   开始日期（可选）
+     * @param endDate     结束日期（可选）
+     * @param salesUserId 销售员ID（可选）
+     * @param status      订单状态（可选）
+     * @return 订单详情分页结果
+     */
+    @Select("<script>" +
+            "SELECT " +
+            "o.id, o.order_no, o.original_price, o.actual_price, o.discount_amount, " +
+            "o.order_date, o.status, o.remark, o.create_time, o.update_time, " +
+            "o.sales_user_id, u.real_name AS sales_user_name, u.phone AS sales_user_phone, " +
+            "o.customer_id, c.name AS customer_name, c.phone AS customer_phone, c.id_card AS customer_id_card, " +
+            "o.car_id, car.vin AS car_vin, car.brand AS car_brand, car.model AS car_model, " +
+            "car.color AS car_color, car.year AS car_year " +
+            "FROM sales_order o " +
+            "INNER JOIN sys_user u ON o.sales_user_id = u.id " +
+            "INNER JOIN customer c ON o.customer_id = c.id " +
+            "INNER JOIN car_info car ON o.car_id = car.id " +
+            "WHERE 1=1 " +
+            "<if test='startDate != null'> AND o.order_date &gt;= #{startDate} </if>" +
+            "<if test='endDate != null'> AND o.order_date &lt;= #{endDate} </if>" +
+            "<if test='salesUserId != null'> AND o.sales_user_id = #{salesUserId} </if>" +
+            "<if test='status != null'> AND o.status = #{status} </if>" +
+            "ORDER BY o.order_date DESC, o.create_time DESC" +
+            "</script>")
+    Page<OrderDetailVO> selectOrderDetailPage(
+            Page<OrderDetailVO> page,
+            @Param("startDate") LocalDate startDate,
+            @Param("endDate") LocalDate endDate,
+            @Param("salesUserId") Long salesUserId,
+            @Param("status") Integer status);
 }

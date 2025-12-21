@@ -250,7 +250,10 @@ public class CarService {
                     // 转换为实体
                     CarInfo carInfo = new CarInfo();
                     BeanUtils.copyProperties(dto, carInfo);
-                    carInfo.setStatus(0); // 初始状态为"在库"
+                    // 如果 Excel 没有填状态，默认为"在库"
+                    if (carInfo.getStatus() == null) {
+                        carInfo.setStatus(0);
+                    }
                     validCars.add(carInfo);
 
                 } catch (Exception e) {
@@ -262,7 +265,8 @@ public class CarService {
             // 如果有任何验证失败，回滚整个事务
             if (!errors.isEmpty()) {
                 log.warn("车辆导入验证失败 - 失败数: {}", failCount);
-                throw new BusinessException(5002, "数据验证失败，请检查错误信息");
+                String errorMessage = "数据验证失败：" + String.join("; ", errors);
+                throw new BusinessException(5002, errorMessage);
             }
 
             // 批量插入

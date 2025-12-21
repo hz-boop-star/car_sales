@@ -159,9 +159,11 @@ public class CarController {
             // 查询数据
             List<CarInfo> carList = carService.exportCars(request);
 
-            // 写入 Excel
+            // 写入 Excel，设置列宽自适应
             EasyExcel.write(response.getOutputStream(), CarInfo.class)
                     .sheet("车辆列表")
+                    .registerWriteHandler(
+                            new com.alibaba.excel.write.style.column.LongestMatchColumnWidthStyleStrategy())
                     .doWrite(carList);
 
             log.info("车辆导出成功 - 数量: {}", carList.size());
@@ -169,6 +171,38 @@ public class CarController {
         } catch (IOException e) {
             log.error("车辆导出失败", e);
             throw new RuntimeException("导出失败");
+        }
+    }
+
+    /**
+     * 下载导入模板
+     * 
+     * @param response HTTP 响应
+     */
+    @GetMapping("/template")
+    public void downloadTemplate(HttpServletResponse response) {
+        log.info("收到模板下载请求");
+
+        try {
+            // 设置响应头
+            response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+            response.setCharacterEncoding("utf-8");
+
+            String fileName = URLEncoder.encode("车辆+导入+模板", StandardCharsets.UTF_8).replaceAll("\\+", "%20");
+            response.setHeader("Content-disposition", "attachment;filename*=utf-8''" + fileName + ".xlsx");
+
+            // 写入空模板（带表头）
+            EasyExcel.write(response.getOutputStream(), CarInfo.class)
+                    .sheet("车辆信息")
+                    .registerWriteHandler(
+                            new com.alibaba.excel.write.style.column.LongestMatchColumnWidthStyleStrategy())
+                    .doWrite(java.util.Collections.emptyList());
+
+            log.info("模板下载成功");
+
+        } catch (IOException e) {
+            log.error("模板下载失败", e);
+            throw new RuntimeException("模板下载失败");
         }
     }
 }

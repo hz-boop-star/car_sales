@@ -27,7 +27,7 @@ public class StatisticsController {
      * 查询销售统计
      */
     @GetMapping("/sales")
-    @RequireRole({ "ADMIN" })
+    @RequireRole({ "ADMIN", "SALES_MANAGER" })
     public Result<List<SalesStatisticsVO>> getSalesStatistics(
             @RequestParam(required = false) String brand) {
         log.info("收到销售统计查询请求 - 品牌: {}", brand);

@@ -53,6 +53,13 @@ public class CarUpdateRequest {
     private BigDecimal price;
 
     /**
+     * 状态：0-在库, 1-锁定, 2-已售
+     */
+    @Min(value = 0, message = "状态值不能小于0")
+    @Max(value = 2, message = "状态值不能大于2")
+    private Integer status;
+
+    /**
      * 进货日期
      */
     private LocalDate purchaseDate;

@@ -28,32 +28,4 @@ public class MybatisPlusConfig {
         return interceptor;
     }
 
-    /**
-     * 自定义ID生成器（雪花算法）
-     * Custom ID generator using Snowflake algorithm
-     * 
-     * MyBatis-Plus默认使用雪花算法生成ID
-     * MyBatis-Plus uses Snowflake algorithm by default
-     * 这里可以自定义workerId和datacenterId
-     * Here we can customize workerId and datacenterId
-     */
-    @Bean
-    public IdentifierGenerator identifierGenerator() {
-        return new IdentifierGenerator() {
-            @Override
-            public Number nextId(Object entity) {
-                // 使用MyBatis-Plus默认的雪花算法实现
-                // Use MyBatis-Plus default Snowflake implementation
-                // workerId和datacenterId会自动从机器信息中获取
-                // workerId and datacenterId are automatically obtained from machine info
-                return com.baomidou.mybatisplus.core.toolkit.IdWorker.getId();
-            }
-
-            @Override
-            public String nextUUID(Object entity) {
-                return com.baomidou.mybatisplus.core.toolkit.IdWorker.get32UUID();
-            }
-        };
-    }
-
 }

@@ -1,9 +1,11 @@
 package com.carsales.dto;
 
 import com.alibaba.excel.annotation.ExcelProperty;
+import com.alibaba.excel.annotation.format.DateTimeFormat;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 /**
  * 车辆导入 DTO
@@ -12,21 +14,28 @@ import java.math.BigDecimal;
 @Data
 public class CarImportDTO {
 
-    @ExcelProperty("车架号")
+    @ExcelProperty(value = "车架号", index = 0)
     private String vin;
 
-    @ExcelProperty("品牌")
+    @ExcelProperty(value = "品牌", index = 1)
     private String brand;
 
-    @ExcelProperty("型号")
+    @ExcelProperty(value = "型号", index = 2)
     private String model;
 
-    @ExcelProperty("颜色")
+    @ExcelProperty(value = "颜色", index = 3)
     private String color;
 
-    @ExcelProperty("年份")
+    @ExcelProperty(value = "年份", index = 4)
     private Integer year;
 
-    @ExcelProperty("价格")
+    @ExcelProperty(value = "价格", index = 5)
     private BigDecimal price;
+
+    @ExcelProperty(value = "状态", index = 6)
+    private Integer status;
+
+    @ExcelProperty(value = "采购日期", index = 7)
+    @DateTimeFormat("yyyy-MM-dd")
+    private LocalDate purchaseDate;
 }

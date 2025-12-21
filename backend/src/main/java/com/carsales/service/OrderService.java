@@ -107,40 +107,32 @@ public class OrderService {
 
     /**
      * 分页查询订单列表（支持多条件筛选）
+     * 返回包含关联信息的订单详情
      * 
      * @param request 查询请求
      * @return 分页结果
      */
-    public Page<SalesOrder> queryOrderList(OrderQueryRequest request) {
-        // 构建查询条件
-        LambdaQueryWrapper<SalesOrder> queryWrapper = new LambdaQueryWrapper<>();
-
-        // 日期区间查询
+    public Page<OrderDetailVO> queryOrderList(OrderQueryRequest request) {
+        // 解析日期参数
+        LocalDate startDate = null;
+        LocalDate endDate = null;
         if (request.getStartDate() != null && !request.getStartDate().isEmpty()) {
-            LocalDate startDate = LocalDate.parse(request.getStartDate(), DateTimeFormatter.ISO_LOCAL_DATE);
-            queryWrapper.ge(SalesOrder::getOrderDate, startDate);
+            startDate = LocalDate.parse(request.getStartDate(), DateTimeFormatter.ISO_LOCAL_DATE);
         }
         if (request.getEndDate() != null && !request.getEndDate().isEmpty()) {
-            LocalDate endDate = LocalDate.parse(request.getEndDate(), DateTimeFormatter.ISO_LOCAL_DATE);
-            queryWrapper.le(SalesOrder::getOrderDate, endDate);
+            endDate = LocalDate.parse(request.getEndDate(), DateTimeFormatter.ISO_LOCAL_DATE);
         }
 
-        // 销售员筛选
-        if (request.getSalesUserId() != null) {
-            queryWrapper.eq(SalesOrder::getSalesUserId, request.getSalesUserId());
-        }
+        // 创建分页对象
+        Page<OrderDetailVO> page = new Page<>(request.getPageNum(), request.getPageSize());
 
-        // 状态筛选
-        if (request.getStatus() != null) {
-            queryWrapper.eq(SalesOrder::getStatus, request.getStatus());
-        }
-
-        // 按订单日期倒序排列
-        queryWrapper.orderByDesc(SalesOrder::getOrderDate);
-
-        // 分页查询
-        Page<SalesOrder> page = new Page<>(request.getPageNum(), request.getPageSize());
-        Page<SalesOrder> result = orderMapper.selectPage(page, queryWrapper);
+        // 调用 Mapper 查询订单详情列表
+        Page<OrderDetailVO> result = orderMapper.selectOrderDetailPage(
+                page,
+                startDate,
+                endDate,
+                request.getSalesUserId(),
+                request.getStatus());
 
         log.debug("订单查询 - 日期区间: [{}, {}], 销售员ID: {}, 状态: {}, 结果数: {}",
                 request.getStartDate(), request.getEndDate(), request.getSalesUserId(),

@@ -66,14 +66,14 @@ public class OrderController {
      * 分页查询订单列表（支持多条件筛选）
      * 
      * @param request 查询请求
-     * @return 分页结果
+     * @return 分页结果（包含关联的用户、客户、车辆信息）
      */
     @GetMapping
-    public Result<Page<SalesOrder>> queryOrderList(OrderQueryRequest request) {
+    public Result<Page<OrderDetailVO>> queryOrderList(OrderQueryRequest request) {
         log.info("收到订单列表查询请求 - 日期区间: [{}, {}], 销售员ID: {}, 状态: {}, 页码: {}",
                 request.getStartDate(), request.getEndDate(), request.getSalesUserId(),
                 request.getStatus(), request.getPageNum());
-        Page<SalesOrder> page = orderService.queryOrderList(request);
+        Page<OrderDetailVO> page = orderService.queryOrderList(request);
         return Result.success(page);
     }
 }

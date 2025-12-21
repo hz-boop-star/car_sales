@@ -1,5 +1,5 @@
 import axios from 'axios'
-import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
+import type { AxiosInstance, AxiosResponse } from 'axios'
 import { ElMessage } from 'element-plus'
 import router from '@/router'
 import { useUserStore } from '@/stores/user'
@@ -27,6 +27,11 @@ service.interceptors.request.use(
 // 响应拦截器
 service.interceptors.response.use(
     (response: AxiosResponse) => {
+        // 如果是文件下载（blob），直接返回
+        if (response.config.responseType === 'blob') {
+            return response
+        }
+
         const res = response.data
 
         // 如果返回的状态码不是 0，说明有错误
