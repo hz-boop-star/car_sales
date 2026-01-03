@@ -1,0 +1,260 @@
+/* 全局通用样式 */
+
+/* 重置和基础样式 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html,
+body,
+#app {
+    width: 100%;
+    height: 100%;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+#app {
+    background-color: #f7f8fa;
+}
+
+/* 增大所有文字基础大小 */
+body {
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+/* Vant 组件样式增强 */
+.van-cell {
+    font-size: 16px !important;
+    padding: 14px 16px !important;
+}
+
+.van-cell__title {
+    font-size: 16px !important;
+}
+
+.van-cell__value {
+    font-size: 16px !important;
+}
+
+.van-cell__label {
+    font-size: 14px !important;
+    margin-top: 6px !important;
+}
+
+.van-field__label {
+    font-size: 16px !important;
+    width: 7em !important;
+}
+
+.van-field__control {
+    font-size: 16px !important;
+}
+
+.van-button {
+    font-size: 16px !important;
+    height: 48px !important;
+    line-height: 48px !important;
+}
+
+.van-button--small {
+    font-size: 14px !important;
+    height: 36px !important;
+    line-height: 36px !important;
+}
+
+.van-card {
+    font-size: 15px !important;
+    padding: 16px !important;
+}
+
+.van-card__title {
+    font-size: 16px !important;
+    font-weight: 600 !important;
+}
+
+.van-card__desc {
+    font-size: 14px !important;
+    margin-top: 6px !important;
+}
+
+.van-card__price {
+    font-size: 18px !important;
+    font-weight: bold !important;
+}
+
+.van-tag {
+    font-size: 13px !important;
+    padding: 4px 8px !important;
+}
+
+.van-tag--medium {
+    font-size: 14px !important;
+    padding: 5px 10px !important;
+}
+
+.van-tag--large {
+    font-size: 16px !important;
+    padding: 6px 12px !important;
+}
+
+.van-nav-bar {
+    height: 50px !important;
+}
+
+.van-nav-bar__title {
+    font-size: 18px !important;
+    font-weight: 600 !important;
+}
+
+.van-nav-bar__text {
+    font-size: 16px !important;
+}
+
+/* 列表项间距 */
+.van-list {
+    padding: 8px 0;
+}
+
+/* 表单间距 */
+.van-cell-group {
+    margin: 12px 0;
+}
+
+.van-cell-group--inset {
+    margin: 12px 16px;
+}
+
+/* 空状态 */
+.van-empty__description {
+    font-size: 15px !important;
+    margin-top: 12px !important;
+}
+
+/* 加载提示 */
+.van-loading__text {
+    font-size: 15px !important;
+    margin-top: 12px !important;
+}
+
+/* 搜索框 */
+.van-search__content {
+    font-size: 16px !important;
+}
+
+/* 选择器 */
+.van-picker__toolbar {
+    height: 48px !important;
+}
+
+.van-picker-column__item {
+    font-size: 16px !important;
+    padding: 8px 0 !important;
+}
+
+/* 弹出层 */
+.van-popup {
+    border-radius: 16px 16px 0 0;
+}
+
+/* 对话框 */
+.van-dialog__header {
+    font-size: 18px !important;
+    padding-top: 28px !important;
+}
+
+.van-dialog__message {
+    font-size: 15px !important;
+    padding: 28px 24px !important;
+}
+
+.van-dialog__button {
+    font-size: 16px !important;
+    height: 52px !important;
+}
+
+/* 浮动按钮 */
+.van-floating-bubble {
+    width: 56px !important;
+    height: 56px !important;
+}
+
+/* 网格 */
+.van-grid-item__content {
+    padding: 20px 12px !important;
+}
+
+.van-grid-item__text {
+    font-size: 14px !important;
+    margin-top: 8px !important;
+}
+
+/* 图片 */
+.van-image {
+    display: block;
+}
+
+/* 通用工具类 */
+.text-center {
+    text-align: center;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.mt-8 {
+    margin-top: 8px;
+}
+
+.mt-16 {
+    margin-top: 16px;
+}
+
+.mb-8 {
+    margin-bottom: 8px;
+}
+
+.mb-16 {
+    margin-bottom: 16px;
+}
+
+.p-16 {
+    padding: 16px;
+}
+
+/* 链接样式 */
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+a:active {
+    opacity: 0.7;
+}
+
+/* 防止文字选中 */
+.no-select {
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+/* 单行文本省略 */
+.ellipsis {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* 多行文本省略 */
+.ellipsis-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

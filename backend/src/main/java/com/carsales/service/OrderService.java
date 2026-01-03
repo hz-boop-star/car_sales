@@ -36,7 +36,7 @@ public class OrderService {
     private final JwtUtil jwtUtil;
 
     /**
-     * 创建订单（调用存储过程）
+     * 创建订单
      * 
      * @param request 订单创建请求
      * @param token   JWT Token（用于获取当前登录用户）
@@ -59,35 +59,72 @@ public class OrderService {
         log.info("开始创建订单 - 销售员: {}, 客户ID: {}, 车辆ID: {}, 成交价: {}",
                 currentUser.getRealName(), request.getCustomerId(), request.getCarId(), request.getActualPrice());
 
+        // ========== SQLite 实现（当前使用） ==========
+        // 生成订单号（格式：ORD + 时间戳）
+        String orderNo = "ORD" + System.currentTimeMillis();
+
+        // 创建订单对象
+        SalesOrder order = new SalesOrder();
+        order.setOrderNo(orderNo);
+        order.setSalesUserId(salesUserId);
+        order.setCustomerId(request.getCustomerId());
+        order.setCarId(request.getCarId());
+        order.setOriginalPrice(request.getOriginalPrice());
+        order.setDiscountAmount(request.getDiscountAmount());
+        order.setActualPrice(request.getActualPrice());
+        order.setOrderDate(LocalDate.parse(request.getOrderDate(), DateTimeFormatter.ISO_LOCAL_DATE));
+        order.setStatus(1); // 默认状态：已完成
+        order.setRemark(request.getRemark());
+
+        // 插入订单
+        int result = orderMapper.insert(order);
+        if (result <= 0) {
+            log.error("订单创建失败：数据库插入失败");
+            throw new BusinessException(5004, "订单创建失败");
+        }
+
+        log.info("订单创建成功 - 订单ID: {}, 订单号: {}", order.getId(), orderNo);
+
+        // 查询并返回订单详情
+        return getOrderDetailById(order.getId());
+
+        // ========== PostgreSQL 存储过程实现（暂时注释，将来切换回 PostgreSQL 时使用） ==========
+        /*
         // 调用存储过程创建订单
-        Map<String, Object> result = orderMapper.callCreateOrderProcedure(
+        Map<String, Object> procResult = orderMapper.callCreateOrderProc(
                 salesUserId,
                 request.getCustomerId(),
                 request.getCarId(),
-                request.getActualPrice());
+                request.getOriginalPrice(),
+                request.getDiscountAmount(),
+                request.getActualPrice(),
+                request.getOrderDate(),
+                request.getRemark()
+        );
 
         // 解析存储过程返回结果
-        Integer resultCode = getIntegerFromMap(result, "p_result_code");
-        String resultMsg = (String) result.get("p_result_msg");
-        Long orderId = getLongFromMap(result, "p_order_id");
+        Integer resultCode = getIntegerFromMap(procResult, "p_result_code");
+        String resultMsg = (String) procResult.get("p_result_msg");
+        Long orderId = getLongFromMap(procResult, "p_order_id");
 
-        log.info("存储过程执行结果 - code: {}, msg: {}, orderId: {}", resultCode, resultMsg, orderId);
+        log.info("存储过程执行完成 - 结果码: {}, 消息: {}, 订单ID: {}", resultCode, resultMsg, orderId);
 
         // 检查执行结果
         if (resultCode == null || resultCode != 0) {
-            log.warn("订单创建失败 - code: {}, msg: {}", resultCode, resultMsg);
-            throw new BusinessException(3000 + (resultCode != null ? resultCode : 99), resultMsg);
+            log.error("订单创建失败 - 结果码: {}, 消息: {}", resultCode, resultMsg);
+            throw new BusinessException(5004, resultMsg != null ? resultMsg : "订单创建失败");
         }
 
         if (orderId == null) {
             log.error("订单创建失败：未返回订单ID");
-            throw new BusinessException(5004, "订单创建失败：未返回订单ID");
+            throw new BusinessException(5004, "订单创建失败");
         }
 
-        log.info("订单创建成功 - 订单ID: {}, 消息: {}", orderId, resultMsg);
+        log.info("订单创建成功 - 订单ID: {}", orderId);
 
         // 查询并返回订单详情
         return getOrderDetailById(orderId);
+        */
     }
 
     /**
@@ -142,8 +179,9 @@ public class OrderService {
     }
 
     /**
-     * 从Map中安全获取Integer值
+     * 从Map中安全获取Integer值（用于PostgreSQL存储过程）
      */
+    @SuppressWarnings("unused")
     private Integer getIntegerFromMap(Map<String, Object> map, String key) {
         Object value = map.get(key);
         if (value == null) {
@@ -159,8 +197,9 @@ public class OrderService {
     }
 
     /**
-     * 从Map中安全获取Long值
+     * 从Map中安全获取Long值（用于PostgreSQL存储过程）
      */
+    @SuppressWarnings("unused")
     private Long getLongFromMap(Map<String, Object> map, String key) {
         Object value = map.get(key);
         if (value == null) {

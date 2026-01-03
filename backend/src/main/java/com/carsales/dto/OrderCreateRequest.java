@@ -30,4 +30,24 @@ public class OrderCreateRequest {
     @NotNull(message = "实际成交价不能为空")
     @Positive(message = "实际成交价必须大于0")
     private BigDecimal actualPrice;
+
+    /**
+     * 原价
+     */
+    private BigDecimal originalPrice;
+
+    /**
+     * 优惠金额
+     */
+    private BigDecimal discountAmount;
+
+    /**
+     * 订单日期
+     */
+    private String orderDate;
+
+    /**
+     * 备注
+     */
+    private String remark;
 }

@@ -1,0 +1,38 @@
+/* 全局 CSS 变量 */
+:root {
+    /* Vant 主题色覆盖 */
+    --van-primary-color: #1989fa;
+    --van-success-color: #07c160;
+    --van-warning-color: #ff976a;
+    --van-danger-color: #ee0a24;
+
+    /* 状态色 */
+    --status-available: #07c160;
+    --status-locked: #ff976a;
+    --status-sold: #ee0a24;
+    --status-completed: #07c160;
+    --status-cancelled: #969799;
+
+    /* 字体大小 */
+    --van-font-size-xs: 12px;
+    --van-font-size-sm: 14px;
+    --van-font-size-md: 16px;
+    --van-font-size-lg: 18px;
+
+    /* 增大 Vant 组件的基础字体 */
+    --van-cell-font-size: 16px;
+    --van-cell-label-font-size: 14px;
+    --van-field-label-width: 7em;
+    --van-button-default-height: 48px;
+    --van-button-default-font-size: 16px;
+
+    /* 卡片间距 */
+    --van-card-padding: 16px;
+    --van-card-font-size: 15px;
+    --van-card-desc-font-size: 14px;
+    --van-card-price-font-size: 18px;
+
+    /* 导航栏 */
+    --van-nav-bar-height: 50px;
+    --van-nav-bar-title-font-size: 18px;
+}

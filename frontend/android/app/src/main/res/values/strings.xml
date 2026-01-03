@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">汽车销售系统</string>
+    <string name="title_activity_main">汽车销售系统</string>
+    <string name="package_name">com.carsales.app</string>
+    <string name="custom_url_scheme">com.carsales.app</string>
+</resources>

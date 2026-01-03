@@ -1,19 +1,10 @@
 spring:
   application:
     name: car-sales-system
-
-  # Database Configuration (openGauss via PostgreSQL driver)
-  datasource:
-    driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:car_sales_db}
-    username: ${DB_USERNAME:gaussdb}
-    password: ${DB_PASSWORD:Gauss@123}
-    hikari:
-      minimum-idle: 5
-      maximum-pool-size: 20
-      connection-timeout: 30000
-      idle-timeout: 600000
-      max-lifetime: 1800000
+  
+  # 默认激活 dev 环境（SQLite）
+  profiles:
+    active: ${SPRING_PROFILE:dev}
 
   # Jackson Configuration
   jackson:
@@ -76,8 +67,8 @@ jwt:
 
 # CORS Configuration
 cors:
-  allowed-origins: http://localhost:5173,http://localhost:3000
+  allowed-origins: "*"
   allowed-methods: GET,POST,PUT,DELETE,OPTIONS
   allowed-headers: "*"
-  allow-credentials: true
+  allow-credentials: false
   max-age: 3600

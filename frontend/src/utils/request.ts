@@ -4,8 +4,9 @@ import { ElMessage } from 'element-plus'
 import router from '@/router'
 import { useUserStore } from '@/stores/user'
 
+// 生产环境使用环境变量中的 API 地址，开发环境使用代理
 const service: AxiosInstance = axios.create({
-    baseURL: '/api',
+    baseURL: import.meta.env.VITE_API_BASE_URL || '/api',
     timeout: 30000
 })
 

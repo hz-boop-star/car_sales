@@ -2,6 +2,7 @@ package com.carsales.exception;
 
 import com.carsales.common.Result;
 import com.carsales.common.ResultCode;
+import io.jsonwebtoken.ExpiredJwtException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -12,7 +13,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import jakarta.validation.ConstraintViolation;import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 import java.util.stream.Collectors;
 
 /**
@@ -34,6 +36,17 @@ public class GlobalExceptionHandler {
     public Result<?> handleBusinessException(BusinessException e) {
         log.warn("业务异常: code={}, message={}", e.getCode(), e.getMessage());
         return Result.error(e.getCode(), e.getMessage());
+    }
+
+    /**
+     * 处理 JWT 过期异常
+     * Handle JWT expired exceptions
+     */
+    @ExceptionHandler(ExpiredJwtException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public Result<?> handleExpiredJwtException(ExpiredJwtException e) {
+        log.warn("Token 已过期: {}", e.getMessage());
+        return Result.error(ResultCode.TOKEN_INVALID, "登录已过期，请重新登录");
     }
 
     /**
@@ -87,7 +100,7 @@ public class GlobalExceptionHandler {
     public Result<?> handleDataIntegrityViolationException(DataIntegrityViolationException e) {
         log.error("数据完整性错误", e);
         String message = e.getMessage();
-        
+
         // 判断具体的约束类型
         if (message != null) {
             if (message.contains("unique") || message.contains("duplicate")) {
@@ -98,7 +111,7 @@ public class GlobalExceptionHandler {
                 return Result.error(ResultCode.DB_CHECK_CONSTRAINT_VIOLATION, "数据不符合检查约束");
             }
         }
-        
+
         return Result.error(ResultCode.DB_UNIQUE_CONSTRAINT_VIOLATION, "数据完整性错误");
     }
 
@@ -109,6 +122,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public Result<?> handleException(Exception e) {
+        // 忽略静态资源 404 错误（爬虫访问）
+        if (e instanceof org.springframework.web.servlet.resource.NoResourceFoundException) {
+            log.debug("静态资源未找到: {}", e.getMessage());
+            return Result.error(ResultCode.SYSTEM_UNKNOWN_ERROR, "资源未找到");
+        }
+
         log.error("系统异常", e);
         return Result.error(ResultCode.SYSTEM_UNKNOWN_ERROR, "系统错误，请联系管理员");
     }

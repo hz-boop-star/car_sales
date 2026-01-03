@@ -1,11 +1,13 @@
 @echo off
 chcp 65001 >nul
-echo Starting Car Sales System Backend (Development Mode)...
+echo ========================================
+echo  汽车销售系统 - 开发环境启动 (SQLite)
+echo ========================================
 echo.
 
 REM Load environment variables from .env file if exists
 if exist .env (
-    echo Loading environment from .env file...
+    echo [√] 加载环境变量 .env
     for /f "usebackq tokens=1,2 delims==" %%a in (.env) do (
         if not "%%a"=="" if not "%%b"=="" (
             echo %%a | findstr /r "^[A-Z]" >nul
@@ -13,16 +15,17 @@ if exist .env (
         )
     )
 ) else (
-    echo WARNING: .env file not found! Please copy .env.example to .env and configure it.
+    echo [!] 警告: .env 文件不存在，使用默认配置
+    echo [i] 提示: 复制 .env.example 为 .env 可自定义配置
     echo.
-    pause
-    exit /b 1
 )
 
-echo Database Configuration:
-echo   Host: %DB_HOST%:%DB_PORT%
-echo   Database: %DB_NAME%
-echo   Username: %DB_USERNAME%
+echo [i] 环境配置:
+echo     Profile: dev (SQLite)
+echo     数据库: %DB_FILE%
+echo     端口: %SERVER_PORT%
+echo.
+echo [*] 启动应用...
 echo.
 
 REM Start the application with dev profile
